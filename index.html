@@ -26,10 +26,10 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center h-screen p-4">
+<body class="bg-sky-100 flex items-center justify-center h-screen p-4">
 
     <div class="w-full max-w-2xl mx-auto bg-white/30 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-10 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold text-white text-shadow mb-8">おなじものをだそう２</h1>
+        <h1 class="text-3xl md:text-5xl font-bold text-blue-600 text-shadow mb-8">おなじものをだそう２</h1>
 
         <!-- 手を表示するエリア -->
         <div class="flex justify-center items-center space-x-4 md:space-x-8 mb-10">
@@ -89,7 +89,7 @@
                 clearTimeout(autoPlayTimeoutId);
                 autoPlayTimeoutId = null;
                 autoButton.textContent = '自動';
-                autoButton.classList.remove('bg-red-500', 'hover:bg-red-600');
+                autoButton.classList.remove('bg-orange-400', 'hover:bg-orange-500');
                 autoButton.classList.add('bg-green-500', 'hover:bg-green-600');
                 gameButton.disabled = false; // 「次へ」ボタンを有効化
             } else {
@@ -100,7 +100,7 @@
                 }
                 autoButton.textContent = '停止';
                 autoButton.classList.remove('bg-green-500', 'hover:bg-green-600');
-                autoButton.classList.add('bg-red-500', 'hover:bg-red-600');
+                autoButton.classList.add('bg-orange-400', 'hover:bg-orange-500');
                 gameButton.disabled = true; // 「次へ」ボタンを無効化
                 autoPlayStep(); // 自動再生のループを開始
             }
@@ -159,4 +159,6 @@
 
 </body>
 </html>
+
+
 
