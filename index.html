@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- H1を削除したため、titleタグを調整 -->
     <title>おなじものをだそう</title>
     <!-- Tailwind CSSを読み込みます -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,52 +24,70 @@
         .hand-emoji.pop {
             transform: scale(1.2);
         }
-        /* ボタンを無効化（disabled）したときのスタイル */
+        /* ボタンやSelectを無効化（disabled）したときのスタイル */
         .btn-disabled:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: scale(1); /* active時の縮小を無効化 */
         }
+        /* Select要素のデフォルトスタイルを上書き */
+        select.btn-active {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            /* 矢印のアイコン（Tailwindの色 (teal-500) に合わせて調整） */
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="%23FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 8l4 4 4-4"/></svg>');
+            background-position: right 0.75rem center; /* 右寄せ */
+            background-repeat: no-repeat;
+            background-size: 1.25em 1.25em;
+            padding-right: 2.5rem; /* 矢印のスペースを確保 */
+        }
+        /* disabled時の矢印 */
+        select.btn-disabled:disabled {
+             background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="%23FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 8l4 4 4-4" opacity="0.5"/></svg>');
+        }
     </style>
 </head>
 <body class="bg-sky-100 flex items-center justify-center h-screen p-4">
 
-    <!-- タイトルを削除し、全体のパディングを調整 -->
     <div class="w-full max-w-2xl mx-auto bg-white/30 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 text-center">
         
-        <!-- h1 class="text-lg md:text-xl font-bold text-blue-600 text-shadow mb-8">おなじものをだそう３</h1 --> <!-- タイトルを削除 -->
-
         <!-- 手を表示するエリア -->
-        <!-- h1削除に伴いマージン調整(mb-10 -> mb-8), 手を大きく (text-6xl md:text-8xl -> text-9xl) -->
-        <!-- 白枠を大きく (w-32 h-32 md:w-48 md:h-48 -> w-40 h-40 md:w-64 md:h-64) -->
         <div class="flex justify-center items-center space-x-4 md:space-x-8 mb-8">
             <div class="bg-white rounded-2xl shadow-lg w-40 h-40 md:w-64 md:h-64 flex items-center justify-center">
-                <!-- 手を大きく (text-9xl -> text-8xl md:text-[10rem]) -->
                 <span id="hand-left-emoji" class="text-8xl md:text-[10rem] hand-emoji"></span>
             </div>
             <div class="bg-white rounded-2xl shadow-lg w-40 h-40 md:w-64 md:h-64 flex items-center justify-center">
-                <!-- 手を大きく (text-9xl -> text-8xl md:text-[10rem]) -->
                 <span id="hand-right-emoji" class="text-8xl md:text-[10rem] hand-emoji"></span>
             </div>
         </div>
 
-        <!-- ボタンエリア -->
-        <div class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3"> <!-- gap-4 -> gap-3 -->
+        <!-- ボタンエリア (gap-y-3で縦の隙間も設定) -->
+        <div class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-3 gap-y-3">
             <!-- 「スタート」/「次へ」ボタン -->
-            <!-- ボタンを小さく (py-3 px-10 text-lg md:text-xl -> py-2 px-6 text-base), 色変更 (indigo -> teal) -->
             <button id="game-button" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full text-base shadow-md transition-all duration-200 btn-active btn-disabled">
                 スタート
             </button>
             <!-- 「自動」/「停止」ボタン -->
-            <!-- ボタンを小さく, 色変更 (green -> teal) -->
             <button id="auto-button" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full text-base shadow-md transition-all duration-200 btn-active btn-disabled">
                 自動
             </button>
             <!-- 「もっと」/「ふつう」ボタン -->
-            <!-- ボタンを小さく -->
             <button id="more-button" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full text-base shadow-md transition-all duration-200 btn-active btn-disabled">
                 もっと
             </button>
+            
+            <!-- (ここから追加) 速度選択ドロップダウン -->
+            <!-- px-6だと矢印と被るため、padding-leftで調整 -->
+            <select id="speed-select" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 pl-6 pr-10 rounded-full text-base shadow-md transition-all duration-200 btn-active btn-disabled focus:outline-none focus:ring-2 focus:ring-teal-400">
+                <!-- optionの文字色はCSSで制御しにくい場合があるため、背景色で対応 -->
+                <option value="auto" class="bg-white text-black">2秒と5秒</option>
+                <option value="2000" class="bg-white text-black">２秒ごと</option>
+                <option value="5000" class="bg-white text-black">５秒ごと</option>
+                <option value="10000" class="bg-white text-black">１０秒ごと</option>
+            </select>
+            <!-- (ここまで追加) -->
+
         </div>
     </div>
 
@@ -78,7 +95,8 @@
         // --- DOM要素の取得 ---
         const gameButton = document.getElementById('game-button');
         const autoButton = document.getElementById('auto-button');
-        const moreButton = document.getElementById('more-button'); // 追加
+        const moreButton = document.getElementById('more-button');
+        const speedSelect = document.getElementById('speed-select'); // 追加
         const leftHandEmoji = document.getElementById('hand-left-emoji');
         const rightHandEmoji = document.getElementById('hand-right-emoji');
 
@@ -92,7 +110,7 @@
         // --- イベントリスナー ---
         gameButton.addEventListener('click', handleManualPlay);
         autoButton.addEventListener('click', toggleAutoPlay);
-        moreButton.addEventListener('click', toggleMoreMode); // 追加
+        moreButton.addEventListener('click', toggleMoreMode);
 
         /**
          * 「スタート」/「次へ」ボタンがクリックされたときの処理
@@ -114,11 +132,11 @@
                 clearTimeout(autoPlayTimeoutId);
                 autoPlayTimeoutId = null;
                 autoButton.textContent = '自動';
-                // 「停止」色(gray)を「自動」色(teal)に戻す (bg-gray-500 -> bg-gray-400)
                 autoButton.classList.remove('bg-gray-400', 'hover:bg-gray-500');
                 autoButton.classList.add('bg-teal-500', 'hover:bg-teal-600');
                 gameButton.disabled = false; // 「次へ」ボタンを有効化
                 moreButton.disabled = false; // 「もっと」ボタンを有効化
+                speedSelect.disabled = false; // (追加) 速度選択を有効化
             } else {
                 // 自動再生を開始
                 if (!isGameStarted) {
@@ -126,59 +144,64 @@
                     gameButton.textContent = '次へ';
                 }
                 autoButton.textContent = '停止';
-                // 「自動」色(teal)を「停止」色(gray)に変更 (bg-gray-500 -> bg-gray-400)
                 autoButton.classList.remove('bg-teal-500', 'hover:bg-teal-600');
                 autoButton.classList.add('bg-gray-400', 'hover:bg-gray-500');
                 gameButton.disabled = true; // 「次へ」ボタンを無効化
                 moreButton.disabled = true; // 「もっと」ボタンを無効化
+                speedSelect.disabled = true; // (追加) 速度選択を無効化
                 autoPlayStep(); // 自動再生のループを開始
             }
         }
 
         /**
-         * 「もっと」/「ふつう」ボタンがクリックされたときの処理 (追加)
+         * 「もっと」/「ふつう」ボタンがクリックされたときの処理
          */
         function toggleMoreMode() {
             isMoreMode = !isMoreMode; // 状態を反転
 
             if (isMoreMode) {
-                // 「もっと」モードに切り替え -> 「ふつう」ボタン表示
                 moreButton.textContent = 'ふつう';
-                // 「もっと」色(teal)を「ふつう」色(gray)に変更 (bg-gray-500 -> bg-gray-400)
                 moreButton.classList.remove('bg-teal-500', 'hover:bg-teal-600');
                 moreButton.classList.add('bg-gray-400', 'hover:bg-gray-500');
             } else {
-                // 「ふつう」モードに切り替え -> 「もっと」ボタン表示
                 moreButton.textContent = 'もっと';
-                // 「ふつう」色(gray)を「もっと」色(teal)に戻す (bg-gray-500 -> bg-gray-400)
                 moreButton.classList.remove('bg-gray-400', 'hover:bg-gray-500');
                 moreButton.classList.add('bg-teal-500', 'hover:bg-teal-600');
             }
         }
 
         /**
-         * 自動再生の各ステップを実行する
+         * 自動再生の各ステップを実行する (修正)
          */
         function autoPlayStep() {
-            // wasIrregularの判定を復活
             const wasIrregular = generateAndShowHands();
-            // 遅延を 2秒 (2000ms) に変更、イレギュラーなら5秒 (5000ms)
-            const delay = wasIrregular ? 5000 : 2000;
+            
+            // (ここから修正) 選択されている速度を取得
+            const selectedSpeed = speedSelect.value; // 'auto', '2000', '5000', ...
+            let delay;
+
+            if (selectedSpeed === 'auto') {
+                // デフォルトの動作（イレギュラーなら5秒、通常なら2秒）
+                delay = wasIrregular ? 5000 : 2000;
+            } else {
+                // 固定速度が選択されている場合
+                delay = parseInt(selectedSpeed, 10);
+            }
+            // (ここまで修正)
+            
             autoPlayTimeoutId = setTimeout(autoPlayStep, delay);
         }
         
         /**
-         * isMoreModeの状態に応じて、ランダムな手を1つ返す (修正)
+         * isMoreModeの状態に応じて、ランダムな手を1つ返す
          * @returns {string} 絵文字
          */
         function getRandomHand() {
             // 「もっと」モードがtrueの場合のみ、10%の確率でイレギュラーな手を考慮
             if (isMoreMode && Math.random() < 0.1) {
-                // イレギュラーな手
                 const randomIndex = Math.floor(Math.random() * irregularHands.length);
                 return irregularHands[randomIndex];
             } else {
-                // 通常の手（グー・チョキ・パー）
                 const randomIndex = Math.floor(Math.random() * hands.length);
                 return hands[randomIndex];
             }
@@ -191,18 +214,14 @@
             const leftHand = getRandomHand();
             const rightHand = getRandomHand();
 
-            // イレギュラーな手が含まれていたかどうかの判定（「ふつう」モードでは常にfalseになる）
             const wasIrregular = irregularHands.includes(leftHand) || irregularHands.includes(rightHand);
 
-            // アニメーション効果を適用
             [leftHandEmoji, rightHandEmoji].forEach(el => {
                 el.classList.remove('pop');
-                // DOMの再描画を強制
                 void el.offsetWidth;
                 el.classList.add('pop');
             });
             
-            // アニメーションが少し落ち着いてから絵文字を変更
             setTimeout(() => {
                 leftHandEmoji.textContent = leftHand;
                 rightHandEmoji.textContent = rightHand;
@@ -217,4 +236,3 @@
 
 </body>
 </html>
-
